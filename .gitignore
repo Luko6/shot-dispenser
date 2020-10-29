@@ -102,3 +102,6 @@ dist
 
 # TernJS port file
 .tern-port
+
+# Files used for testing
+test.js

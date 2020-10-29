@@ -1,28 +1,33 @@
+// Import the required packages
 const express = require('express');
-const app = express();
 var SerialPort = require("serialport");
 
-var port = 6969;
+// Call the express package
+const app = express();
 
+// Set the port for the website
+var port = 5000;
+
+// Set the serial port for the Arduino
 var arduinoCOMPort = "/dev/ttyUSB0";
-
 var arduinoSerialPort = new SerialPort(arduinoCOMPort, {
 	baudRate: 9600
 });
 
+// Start the serial communication
 arduinoSerialPort.on('open', function(){
 	console.log('Serial Port ' + arduinoCOMPort + ' is opened.');
 });
 
-/*app.get('/', function (req, res) {
-	return res.send('<h1>Home Page</h1><br><a href="r">Red</a><br><a href="g">Green</a><br><a href="b">Blue</a><br><a href="y">Yellow</a>');
-})*/
+
 app.use(express.static(__dirname + '/public'))
 
+// Main page
 app.get('/', function (req, res) {
     res.sendFile(__dirname + '/html/kutyahome.html');
 });
 
+// Action page
 app.get('/:action', function (req, res) {
 
    var action = req.params.action || req.param('action');
@@ -31,10 +36,10 @@ app.get('/:action', function (req, res) {
         arduinoSerialPort.write("r");
 				return res.sendFile(__dirname + '/html/kutya.html');
     }
-		if(action == 'debug'){
+	if(action == 'debug'){
 				return res.sendFile(__dirname + '/html/debug.html');
 		}
-		if(action == 'dr'){
+	if(action == 'dr'){
         arduinoSerialPort.write("r");
 				return res.sendFile(__dirname + '/html/debug.html');
     }
@@ -42,19 +47,17 @@ app.get('/:action', function (req, res) {
         arduinoSerialPort.write("s");
         return res.sendFile(__dirname + '/html/debug.html');
     }
-		if(action == 'dt') {
+	if(action == 'dt') {
         arduinoSerialPort.write("t");
         return res.sendFile(__dirname + '/html/debug.html');
-    }/*
-		if(action == 'y') {
-        arduinoSerialPort.write("10");
-        return res.sendFile(__dirname + '/html/test.html');
-    }*/
+    }
 
+    // Send the action on the serial port for the arduino
     return res.send('Action: ' + action);
 
 });
 
+// Start up the server
 app.listen(port, function() {
 	console.log('Kutya app listening on port localhost:' + port + '!');
 });
