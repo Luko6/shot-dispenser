@@ -24,7 +24,7 @@ app.use(express.static(__dirname + '/public'))
 
 // Main page
 app.get('/', function (req, res) {
-    res.sendFile(__dirname + '/html/kutyahome.html');
+    res.sendFile(__dirname + '/html/drink.html');
 });
 
 // Action page
@@ -34,7 +34,7 @@ app.get('/:action', function (req, res) {
 
     if(action == 'r'){
         arduinoSerialPort.write("r");
-				return res.sendFile(__dirname + '/html/kutya.html');
+				return res.sendFile(__dirname + '/html/drink.html');
     }
 	if(action == 'debug'){
 				return res.sendFile(__dirname + '/html/debug.html');
@@ -59,5 +59,5 @@ app.get('/:action', function (req, res) {
 
 // Start up the server
 app.listen(port, function() {
-	console.log('Kutya app listening on port localhost:' + port + '!');
+	console.log('Drink app listening on port localhost:' + port + '!');
 });
